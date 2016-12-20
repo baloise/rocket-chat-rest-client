@@ -2,6 +2,7 @@ package com.github.baloise.rocketchatrestclient;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.github.baloise.rocketchatrestclient.model.Room;
@@ -21,6 +22,7 @@ public class RocketChatClientTestIT {
 	String user = "admin";
 	String password = "supersecret";
 	RocketChatClient rc = new RocketChatClient(serverUrl, user, password);
+	String roomNameTest = "testroom";
 
 	@Test
 	public void testRocketCatExists() throws Exception {
@@ -32,10 +34,44 @@ public class RocketChatClientTestIT {
 		assertTrue("The Rocket.Cat user's id doesn't match what it should be.", "rocket.cat".equals(rocketCat.getId()));
 
 	}
-
+	
 	@Test
-	public void testCreateChannel() throws Exception {
-		Room room = rc.createChannel("test1234");
+	@Ignore
+	public void testCreateAndCloseChannel() throws Exception{
+		Room room = rc.createChannel(roomNameTest);
 		assertTrue( "Room Id shouldn't be null if the room was created", (room.getId() !=null && !room.getId().isEmpty()));
+	
+		boolean isCalled = false;
+		Room[] rooms = rc.getChannels();
+		for(Room room1: rooms ){
+			if(room1.getName().equals(this.roomNameTest))
+			{
+				rc.archiveChannel(room.getId());
+				isCalled = true;
+				break;
+			}
+		}
+		
+		assertTrue("Error, channel did not exist for closing",isCalled);
+	}
+	
+	@Test
+	@Ignore
+	public void testCreateAndArchiveChannel() throws Exception{
+		Room room = rc.createChannel(roomNameTest);
+		assertTrue( "Room Id shouldn't be null if the room was created", (room.getId() !=null && !room.getId().isEmpty()));
+	
+		boolean isCalled = false;
+		Room[] rooms = rc.getChannels();
+		for(Room room1: rooms ){
+			if(room1.getName().equals(this.roomNameTest))
+			{
+				rc.archiveChannel(room.getId());
+				isCalled = true;
+				break;
+			}
+		}
+		
+		assertTrue("Error, channel did not exist for closing",isCalled);
 	}
 }

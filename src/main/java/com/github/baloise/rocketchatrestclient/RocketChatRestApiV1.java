@@ -16,6 +16,14 @@ public enum RocketChatRestApiV1 {
     ChannelsList("channels.list", HttpMethods.GET, true),
     /** Creates a new <strong>public</strong> channel. */
     ChannelsCreate("channels.create", HttpMethods.POST, true),
+    /** Adds <strong>all</strong> users to the specified channel. */
+    ChannelsAddAll("channels.addAll", HttpMethods.POST, true),
+    /** Archives a channel. */
+    ChannelsArchive("channels.archive", HttpMethods.POST, true),
+    /** Closes a channel. */
+    ChannelsClose("channels.close", HttpMethods.POST, true),
+    /** Cleans up a channel (removing messages) */
+    ChannelsCleanHistory("channels.cleanHistory", HttpMethods.POST, true),
     /** Deletes a chat message. */
     ChatDelete("chat.delete", HttpMethods.POST, true),
     /** Sends a new chat message */

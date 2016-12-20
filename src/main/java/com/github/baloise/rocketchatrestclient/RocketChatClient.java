@@ -1,6 +1,11 @@
 package com.github.baloise.rocketchatrestclient;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.github.baloise.rocketchatrestclient.model.Room;
 import com.github.baloise.rocketchatrestclient.model.ServerInfo;
@@ -16,6 +21,7 @@ import com.github.baloise.rocketchatrestclient.model.User;
  */
 public class RocketChatClient {
     private RocketChatClientCallBuilder callBuilder;
+    private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
 
     /**
      * Initialize a new instance of the client providing the server's url along with username and
@@ -163,5 +169,113 @@ public class RocketChatClient {
 
 		return res.getChannel();
 	}
+	
+	 /**
+     * Adds <strong>all</strong> of the users of the Rocket.Chat server to the channel.
+     * 
+     * @param channelId 	the "_id" of the room to add all users to
+     * @return {@link Room} which is the channel
+     * @throws IOException is thrown if there was a problem connecting, including if the result
+     *             wasn't successful
+     */
+    public Room addAllChannel(String channelId) throws IOException {
+        RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.ChannelsAddAll, new RocketChatQueryParams("roomId", channelId));
+        
+        if (!res.isSuccessful())
+            throw new IOException("The call to get the Channel's Information was unsuccessful.");
+        
+        if (!res.hasChannel())
+            throw new IOException("The response does not contain any channel information.");
+        
+        return res.getChannel();
+    }
+    
+    /**
+     * Archives a channel
+     * 
+     * @param channelId 	the "_id" of the room to add all users to
+     * @throws IOException 	is thrown if there was a problem connecting, including if the result
+     *             wasn't successful
+     */
+    public void archiveChannel(String channelId) throws IOException {
+    	Map<String,Object> qp = new HashMap<String,Object>();
+    	qp.put("roomId", channelId);
+        RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.ChannelsArchive, null, qp);
+        
+        if (!res.isSuccessful())
+            throw new IOException("The call to archive the Channel was unsuccessful.");
+        
+    }
+    
+    /**
+     * Cleans up a channel, removing messages from the provided time range.
+     * 
+     * @param channelId 	the "_id" of the room to clean the history of
+     * @param latest 		{@link java.util.Date} end date of time range of messages to clean
+     * @param oldest 		{@link java.util.Date} start date of time range of messages to clean
+     * @param inclusive 	{@link java.lang.Boolean} whether messages which land on latest and oldest should be included
+     * @throws IOException 	is thrown if there was a problem connecting, including if the result
+     *             wasn't successful
+     */
+    public void cleanHistoryOfChannel(String channelId, Date latest, Date oldest, Boolean inclusive) throws IOException {
+        
+    	Map<String,Object> rcqp = new HashMap<String,Object>();
+    	rcqp.put("roomId", channelId);
+    	
+    	if(latest!=null && oldest!=null && inclusive!=null)
+    	{
+    		rcqp.put("latest", df.format(latest));
+    		rcqp.put("oldest", df.format(oldest));
+    		rcqp.put("inclusive", inclusive);
+    	}else{
+    		throw new IOException("latest, oldest and inclusive must not be null");
+    	}
+    	
+    	RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.ChannelsCleanHistory, null, rcqp);
+        
+        if (!res.isSuccessful())
+            throw new IOException("The call to clean the Channel was unsuccessful.");
+        
+    }
+    
+    /**
+     * Closes a channel
+     * 
+     * @param channelId the "_id" of the room to add all users to
+     * @throws IOException is thrown if there was a problem connecting, including if the result
+     *             wasn't successful
+     */
+    public void closeChannel(String channelId) throws IOException {
+    	Map<String, Object> bodyMap = new HashMap<String,Object>();
+    	bodyMap.put("roomId", channelId);
+        RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.ChannelsClose, null, (new HashMap<String,Object>()).put("roomId", channelId) );
+        
+        if (!res.isSuccessful())
+            throw new IOException("The call to close the Channel was unsuccessful.");
+        
+    }
+    
+    /**
+     * Retrieves the information about the channel.
+     * 
+     * @param channelId 	the "_id" of the room to get information
+     * @throws IOException 	is thrown if there was a problem connecting, including if the result
+     *             wasn't successful
+     * @returns The {$link Room} of the channel
+     */
+    public Room getChannelInfo(String channelId) throws IOException {
+        RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.ChannelsInfo, 
+        		new RocketChatQueryParams("roomId", channelId));
+        
+        if (!res.isSuccessful())
+            throw new IOException("The call to get the Channel's information failed.");
+        
+        if (!res.hasChannel())
+            throw new IOException("The call to get the Channel's information failed.");
+        
+        return res.getChannel();
+        
+    }
+    
 	
 }
