@@ -112,7 +112,7 @@ public class RocketChatClientCallBuilder {
         }
 
         if (queryParams != null && !queryParams.isEmpty()) {
-            for (Entry<? extends String, ? extends String> e : queryParams.get().entrySet()) {
+            for (Entry<? extends String, ? extends String> e : queryParams.entrySet()) {
                 req.queryString(e.getKey(), e.getValue());
             }
         }
@@ -135,7 +135,7 @@ public class RocketChatClientCallBuilder {
         }
 
         if (queryParams != null && !queryParams.isEmpty()) {
-            for (Entry<? extends String, ? extends String> e : queryParams.get().entrySet()) {
+            for (Entry<? extends String, ? extends String> e : queryParams.entrySet()) {
                 req.queryString(e.getKey(), e.getValue());
             }
         }
