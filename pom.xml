@@ -65,6 +65,7 @@
 							<goal>start</goal>
 						</goals>
 						<configuration>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 							<images>
 								<image>
 									<name>rocketchat:2.1</name>
@@ -74,13 +75,15 @@
 									</build>
 									<run>
 										<log>
-											<enabled>true</enabled>
+											<enabled>false</enabled>
 										</log>
-										<links>
-											<link>
-												mongo
-											</link>
-										</links>
+										<network>
+											<name>backend</name>
+											<alias>rocketchat</alias>
+										</network>
+										<dependsOn>
+											<container>mongo</container>
+										</dependsOn>
 										<wait>
 											<http>
 												<url>http://localhost:23737</url>
@@ -98,13 +101,41 @@
 									<name>mongo:3.6</name>
 									<alias>mongo</alias>
 									<run>
+										<log>
+											<enabled>false</enabled>
+										</log>
 										<wait>
 											<log>waiting for connections on port 27017</log>
 											<time>20000</time>
 										</wait>
 										<cmd>mongod --smallfiles --oplogSize 128 --replSet rs0</cmd>
+										<network>
+											<name>backend</name>
+											<alias>mongo</alias>
+										</network>
 									</run>
 								</image>
+
+								<image>
+									<name>mongo:3.6</name>
+									<alias>mongo-init-replica</alias>
+									<run>
+										<log>
+											<enabled>false</enabled>
+										</log>
+										<cmd>
+											<arg>mongo</arg>
+											<arg>mongo/rocketchat</arg>
+											<arg>--eval</arg>
+											<arg>rs.initiate({ _id:'rs0', members: [ { _id: 0, host: 'localhost:27017' }]})</arg>
+										</cmd>
+										<network>
+											<name>backend</name>
+											<alias>mongo-init-replica</alias>
+										</network>
+									</run>
+								</image>
+
 							</images>
 						</configuration>
 					</execution>

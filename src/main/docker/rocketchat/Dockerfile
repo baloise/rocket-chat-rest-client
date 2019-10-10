@@ -22,6 +22,7 @@ WORKDIR /app/bundle
 
 # needs a mongoinstance - defaults to container linking with alias 'mongo'
 ENV MONGO_URL=mongodb://mongo:27017/rocketchat \
+	MONGO_OPLOG_URL=mongodb://mongo:27017/local \
     HOME=/tmp \
     PORT=3000 \
     ROOT_URL=http://localhost:23737 \
@@ -33,4 +34,4 @@ ENV MONGO_URL=mongodb://mongo:27017/rocketchat \
 
 EXPOSE 3000
 
-CMD bash -c 'for i in `seq 1 5`; do node main.js && s=$? && break || s=$?; echo "Tried $i times. Waiting 5 secs..."; sleep 5; done; (exit $s)'
+CMD bash -c 'for i in `seq 1 10`; do node main.js && s=$? && break || s=$?; echo "Tried $i times. Waiting 5 secs..."; sleep 5; done; (exit $s)'
