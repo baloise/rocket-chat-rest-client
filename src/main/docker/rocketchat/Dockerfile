@@ -1,4 +1,4 @@
-FROM rocketchat/base:4
+FROM rocketchat/base:8
 
 ENV RC_VERSION latest
 
@@ -7,14 +7,14 @@ MAINTAINER buildmaster@rocket.chat
 VOLUME /app/uploads
 
 RUN set -x \
- && curl -SLf "https://rocket.chat/releases/${RC_VERSION}/download" -o rocket.chat.tgz \
- && curl -SLf "https://rocket.chat/releases/${RC_VERSION}/asc" -o rocket.chat.tgz.asc \
+ && curl -SLf "https://releases.rocket.chat/${RC_VERSION}/download" -o rocket.chat.tgz \
+ && curl -SLf "https://releases.rocket.chat/${RC_VERSION}/asc" -o rocket.chat.tgz.asc \
  && gpg --verify rocket.chat.tgz.asc \
  && tar -zxf rocket.chat.tgz -C /app \
  && rm rocket.chat.tgz rocket.chat.tgz.asc \
  && cd /app/bundle/programs/server \
  && npm install \
- && npm cache clear
+ && npm cache clear --force
 
 USER rocketchat
 
@@ -33,4 +33,4 @@ ENV MONGO_URL=mongodb://mongo:27017/rocketchat \
 
 EXPOSE 3000
 
-CMD ["node", "main.js"]
+CMD bash -c 'for i in `seq 1 5`; do node main.js && s=$? && break || s=$?; echo "Tried $i times. Waiting 5 secs..."; sleep 5; done; (exit $s)'

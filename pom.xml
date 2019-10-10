@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.baloise</groupId>
 	<artifactId>rocket-chat-rest-client</artifactId>
 	<version>0.1.2-SNAPSHOT</version>
 	<properties>
-		<jackson.version>2.9.8</jackson.version>
+		<jackson.version>2.9.9</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -53,7 +54,7 @@
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.17.1</version>
+				<version>0.31.0</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -66,11 +67,15 @@
 						<configuration>
 							<images>
 								<image>
-									<name>rocketchat/it</name>
+									<name>rocketchat:2.1</name>
+									<alias>rocketchat</alias>
 									<build>
 										<dockerFileDir>rocketchat</dockerFileDir>
 									</build>
 									<run>
+										<log>
+											<enabled>true</enabled>
+										</log>
 										<links>
 											<link>
 												mongo
@@ -88,14 +93,16 @@
 									</run>
 
 								</image>
+
 								<image>
-									<name>mongo:latest</name>
+									<name>mongo:3.6</name>
 									<alias>mongo</alias>
 									<run>
 										<wait>
 											<log>waiting for connections on port 27017</log>
 											<time>20000</time>
 										</wait>
+										<cmd>mongod --smallfiles --oplogSize 128 --replSet rs0</cmd>
 									</run>
 								</image>
 							</images>
