@@ -10,6 +10,7 @@ import com.github.baloise.rocketchatrestclient.model.Channel;
 import com.github.baloise.rocketchatrestclient.model.Group;
 import com.github.baloise.rocketchatrestclient.model.Room;
 import com.github.baloise.rocketchatrestclient.model.ServerInfo;
+import com.github.baloise.rocketchatrestclient.model.Setting;
 import com.github.baloise.rocketchatrestclient.model.User;
 import com.github.baloise.rocketchatrestclient.util.TestConnectionInfo;
 
@@ -148,4 +149,19 @@ public class RocketChatClientTestIT {
         group = this.rc.getGroupsApi().rename(group);
         assertEquals(TEST_CASE_8, group.getName());
     }
+    
+	@Test
+	public void testGetSettingById() throws Exception{
+		Setting setting = this.rc.getSettingsApi().getById("Organization_Name");
+		assertEquals("Organization_Name", setting.getId());
+		assertEquals("", setting.getValue());
+	}
+	
+	@Test
+	public void testSetSettingById() throws Exception{
+		this.rc.getSettingsApi().setById("Organization_Name", "TestOrganizationName");
+		Setting setting = this.rc.getSettingsApi().getById("Organization_Name");
+		assertEquals("TestOrganizationName", setting.getValue());
+	}
+	
 }
