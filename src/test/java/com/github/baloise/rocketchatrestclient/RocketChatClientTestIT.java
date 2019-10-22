@@ -167,6 +167,7 @@ public class RocketChatClientTestIT {
 		assertEquals("TestOrganizationName", setting.getValue());
 	}
 	
+<<<<<<< Upstream, based on origin/master
 	@Test
 	public void testListSettings() throws Exception{
 		Setting[] settings = this.rc.getSettingsApi().list();
@@ -176,4 +177,6 @@ public class RocketChatClientTestIT {
 			.filter(e -> "Organization_Name".equals(e.getId())).findFirst().orElse(null);
 		assertNotNull(organizationNameSetting);
 	}
+=======
+>>>>>>> 10a96fe #35 add test cases for get/set by id
 }
