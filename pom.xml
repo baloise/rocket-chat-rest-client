@@ -127,7 +127,8 @@
 											<arg>mongo</arg>
 											<arg>mongo/rocketchat</arg>
 											<arg>--eval</arg>
-											<arg>rs.initiate({ _id:'rs0', members: [ { _id: 0, host: 'localhost:27017' }]})</arg>
+											<arg>rs.initiate({ _id:'rs0', members: [ { _id: 0, host:
+												'localhost:27017' }]})</arg>
 										</cmd>
 										<network>
 											<name>backend</name>
@@ -161,7 +162,9 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration />
+				<configuration>
+					<trimStackTrace>false</trimStackTrace>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
