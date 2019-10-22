@@ -84,6 +84,9 @@
 										<dependsOn>
 											<container>mongo</container>
 										</dependsOn>
+										<env>
+											<API_Enable_Rate_Limiter>false</API_Enable_Rate_Limiter>
+										</env>
 										<wait>
 											<http>
 												<url>http://localhost:23737</url>

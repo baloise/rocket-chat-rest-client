@@ -2,6 +2,9 @@ package com.github.baloise.rocketchatrestclient;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -164,4 +167,13 @@ public class RocketChatClientTestIT {
 		assertEquals("TestOrganizationName", setting.getValue());
 	}
 	
+	@Test
+	public void testListSettings() throws Exception{
+		Setting[] settings = this.rc.getSettingsApi().list();
+		assertNotNull(settings);
+		List<Setting> _settings = Arrays.asList(settings);
+		Setting organizationNameSetting = _settings.stream()
+			.filter(e -> "Organization_Name".equals(e.getId())).findFirst().orElse(null);
+		assertNotNull(organizationNameSetting);
+	}
 }

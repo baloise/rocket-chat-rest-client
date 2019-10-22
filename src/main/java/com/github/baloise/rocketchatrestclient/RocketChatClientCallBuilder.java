@@ -101,9 +101,11 @@ public class RocketChatClientCallBuilder {
         if (loginResult.getStatus() == 401)
             throw new IOException("The username and password provided are incorrect.");
 
-        if (loginResult.getStatus() != 200)
-            throw new IOException("The login failed with a result of: " + loginResult.getStatus());
-
+        
+		if (loginResult.getStatus() != 200)
+			throw new IOException("The login failed with a result of: " + loginResult.getStatus()
+				+ " (" + loginResult.getStatusText() + ")");
+		
         JSONObject data = loginResult.getBody().getObject().getJSONObject("data");
         this.authToken = data.getString("authToken");
         this.userId = data.getString("userId");

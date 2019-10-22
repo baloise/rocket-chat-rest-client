@@ -11,6 +11,18 @@ public class RocketChatRestApiV1Settings {
 	protected RocketChatRestApiV1Settings(RocketChatClientCallBuilder callBuilder) {
 		this.callBuilder = callBuilder;
 	}
+	
+	public Setting[] list() throws IOException{
+		RocketChatQueryParams rocketChatQueryParams = new RocketChatQueryParams("count", "0");
+		RocketChatClientResponse res =
+			this.callBuilder.buildCall(RocketChatRestApiV1.SettingsGetAll, rocketChatQueryParams);
+		
+		if (!res.isSuccessful())
+			throw new IOException(
+				"The call to get Settings was unsuccessful: \"" + res.getError() + "\"");
+		
+		return res.getSettings();
+	}
 
 	public Setting getById(String settingId) throws IOException {
 		RocketChatQueryParams rocketChatQueryParams = new RocketChatQueryParams(

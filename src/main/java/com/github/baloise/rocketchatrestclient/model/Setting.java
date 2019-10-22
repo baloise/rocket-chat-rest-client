@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Setting {
 	private String id;
-	private String value;
+	private Object value;
 
 	@JsonGetter("_id")
 	public String getId() {
@@ -18,12 +18,12 @@ public class Setting {
 	}
 
 	@JsonGetter("value")
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
 	@JsonSetter("value")
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
