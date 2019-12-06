@@ -167,7 +167,10 @@ public class RocketChatClientTestIT {
 		assertEquals("TestOrganizationName", setting.getValue());
 	}
 	
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/col-panic/rocket-chat-rest-client.git
 	@Test
 	public void testSetSettingByIdBoolean() throws Exception{
 		this.rc.getSettingsApi().setById("SAML_Custom_Default", Boolean.TRUE);
