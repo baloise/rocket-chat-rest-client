@@ -161,13 +161,20 @@ public class RocketChatClientTestIT {
 	}
 	
 	@Test
-	public void testSetSettingById() throws Exception{
+	public void testSetSettingByIdString() throws Exception{
 		this.rc.getSettingsApi().setById("Organization_Name", "TestOrganizationName");
 		Setting setting = this.rc.getSettingsApi().getById("Organization_Name");
 		assertEquals("TestOrganizationName", setting.getValue());
 	}
 	
 
+	@Test
+	public void testSetSettingByIdBoolean() throws Exception{
+		this.rc.getSettingsApi().setById("SAML_Custom_Default", Boolean.TRUE);
+		Setting setting = this.rc.getSettingsApi().getById("SAML_Custom_Default");
+		assertEquals(Boolean.TRUE, setting.getValue());
+	}
+	
 	@Test
 	public void testListSettings() throws Exception{
 		Setting[] settings = this.rc.getSettingsApi().list();
