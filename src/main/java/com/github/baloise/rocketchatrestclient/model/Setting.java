@@ -21,8 +21,9 @@ public class Setting {
 	public Object getValue(){
 		
 		if (value instanceof String) {
-			if (Boolean.FALSE.toString().equalsIgnoreCase((String) value)
-				|| Boolean.TRUE.toString().equalsIgnoreCase((String) value)) {
+			String _value = (String) value;
+			if (Boolean.FALSE.toString().equalsIgnoreCase(_value)
+				|| Boolean.TRUE.toString().equalsIgnoreCase(_value)) {
 				return Boolean.valueOf((String) value);
 			}
 		}
