@@ -93,7 +93,7 @@ public class RocketChatClientCallBuilder {
         HttpResponse<JsonNode> loginResult;
 
         try {
-            loginResult = Unirest.post(serverUrl + "v1/login").field("username", user).field("password", password).asJson();
+            loginResult = Unirest.post(serverUrl + "v1/login").field("user", user).field("password", password).asJson();
         } catch (UnirestException e) {
             throw new IOException(e);
         }

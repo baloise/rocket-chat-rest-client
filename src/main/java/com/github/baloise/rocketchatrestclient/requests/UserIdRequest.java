@@ -1,26 +1,23 @@
 package com.github.baloise.rocketchatrestclient.requests;
 
 public class UserIdRequest {
-    private String username, userId;
+    private String username;
+    private String email;
 
-    public UserIdRequest(String userName, String userId) {
-        this.username = userName;
-        this.userId = userId;
-    }
-    
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
     public String getUsername() {
         return this.username;
     }
-    
-    public void setUserId(String userId) {
-        this.userId = userId;
+
+    public void setUsername(String username) {
+        this.username = username;
     }
-    
-    public String getUserId() {
-        return this.userId;
+
+    public String getEmail() {
+        return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
