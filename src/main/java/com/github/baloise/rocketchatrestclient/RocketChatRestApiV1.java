@@ -85,6 +85,10 @@ public enum RocketChatRestApiV1 {
     UsersList("users.list", HttpMethods.GET, true),
     /** Creates a new user. */
     UsersCreate("users.create", HttpMethods.POST, true),
+    /** Updates a user. */
+    UsersUpdate("users.update", HttpMethods.POST, true),
+    /** Deletes a user. */
+    UsersDelete("users.delete", HttpMethods.POST, true),
     /** Creates an auth token for an existing user**/
     UsersCreateToken("users.createToken",HttpMethods.POST, true);
 
