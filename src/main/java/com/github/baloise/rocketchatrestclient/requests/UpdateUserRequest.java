@@ -12,9 +12,6 @@ public class UpdateUserRequest {
 	private String userId;
 	private Data data;
 
-	public UpdateUserRequest() {
-	}
-
 	/**
 	 * @return the userId
 	 */
@@ -49,9 +46,6 @@ public class UpdateUserRequest {
 		private String name;
 		private String password;
 		private boolean active;
-
-		public Data() {
-		}
 
 		/**
 		 * @return the email
