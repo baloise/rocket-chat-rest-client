@@ -37,6 +37,26 @@ public class RocketChatRestApiV1Users {
 	}
 
 	/**
+	 * Gets the list of users matching the {@link RocketChatQueryParams}
+	 * 
+	 * @param rocketChatQueryParams
+	 * @return an array of {@link User}s
+	 * @throws IOException is thrown if there was a problem connecting, including if
+	 *                     the result wasn't successful
+	 */
+	public User[] list(RocketChatQueryParams rocketChatQueryParams) throws IOException {
+		RocketChatClientResponse res = this.callBuilder.buildCall(RocketChatRestApiV1.UsersList, rocketChatQueryParams);
+
+		if (!res.isSuccessful())
+			throw new IOException("The call to get the Users was unsuccessful: \"" + res.getError() + "\"");
+
+		if (!res.hasUsers())
+			throw new IOException("Get User Information failed to retrieve the users.");
+
+		return res.getUsers();
+	}
+
+	/**
 	 * Retrieves a {@link User} from the Rocket.Chat server.
 	 *
 	 * @param userId of the user to retrieve
