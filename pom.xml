@@ -68,7 +68,7 @@
 							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 							<images>
 								<image>
-									<name>rocketchat:2.4</name>
+									<name>rocketchat:3.3.3</name>
 									<alias>rocketchat</alias>
 									<build>
 										<dockerFileDir>rocketchat</dockerFileDir>
