@@ -68,11 +68,7 @@
 							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 							<images>
 								<image>
-<<<<<<< HEAD
 									<name>rocketchat:3.3.3</name>
-=======
-									<name>rocketchat:2.4</name>
->>>>>>> branch 'master' of https://github.com/baloise/rocket-chat-rest-client.git
 									<alias>rocketchat</alias>
 									<build>
 										<dockerFileDir>rocketchat</dockerFileDir>
