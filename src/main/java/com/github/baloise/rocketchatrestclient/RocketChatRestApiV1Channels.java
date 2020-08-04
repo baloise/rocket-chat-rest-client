@@ -300,6 +300,31 @@ public class RocketChatRestApiV1Channels {
         return res.getChannel();
     }
 
+	/**
+	 * Convenience method to find a channel by its name
+	 * 
+	 * @param channelName
+	 *            to search for
+	 * @return the Channel if exactly one found, else null
+	 * @throws IOException
+	 *             on error
+	 */
+	public Channel findByName(String channelName) throws IOException{
+		if (channelName != null) {
+			RocketChatQueryParams queryParam =
+				new RocketChatQueryParams("query", "{ \"name\": \"" + channelName + "\" }");
+			Channel[] list = list(queryParam);
+			if (list.length > 1) {
+				throw new IOException(
+					"Multiple channels with channelName " + channelName + " found.");
+			}
+			if (list.length == 1) {
+				return list[0];
+			}
+		}
+		return null;
+	}
+    
     /**
      * Gets the first number of the public channels from the Rocket.Chat server,
      * the amount depends on what the server has configured to return as the
