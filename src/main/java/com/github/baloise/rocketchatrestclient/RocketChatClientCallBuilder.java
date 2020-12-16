@@ -1,6 +1,8 @@
 package com.github.baloise.rocketchatrestclient;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Map.Entry;
 
@@ -31,6 +33,7 @@ public class RocketChatClientCallBuilder {
     private final String serverUrl;
     private final String user;
     private final String password;
+    private String sha256password;
     private String authToken;
     private String userId;
 
@@ -66,7 +69,13 @@ public class RocketChatClientCallBuilder {
 
     protected RocketChatClientResponse buildCall(RocketChatRestApiV1 call, RocketChatQueryParams queryParams, Object body) throws IOException {
         if (call.requiresAuth() && (authToken.isEmpty() || userId.isEmpty())) {
-            login();
+        	login();
+        	try {
+				byte[] digest = MessageDigest.getInstance("SHA-256").digest(password.trim().getBytes());
+				sha256password = bytesToHex(digest);
+			} catch (NoSuchAlgorithmException e) {
+				throw new IOException("Could not generate sha256 password digest", e);
+			}
         }
 
         switch (call.getHttpMethod()) {
@@ -78,6 +87,23 @@ public class RocketChatClientCallBuilder {
                 throw new IOException("Http Method " + call.getHttpMethod().toString() + " is not supported.");
         }
     }
+    
+	/**
+	 * @param hash
+	 * @return get the hashed value in hexadecimal
+	 * @see https://www.baeldung.com/sha-256-hashing-java
+	 */
+	private String bytesToHex(byte[] hash){
+		StringBuilder hexString = new StringBuilder(2 * hash.length);
+		for (int i = 0; i < hash.length; i++) {
+			String hex = Integer.toHexString(0xff & hash[i]);
+			if (hex.length() == 1) {
+				hexString.append('0');
+			}
+			hexString.append(hex);
+		}
+		return hexString.toString();
+	}
 
     protected void logout() throws IOException {
         try {
@@ -118,6 +144,8 @@ public class RocketChatClientCallBuilder {
         if (call.requiresAuth()) {
             req.header("X-Auth-Token", authToken);
             req.header("X-User-Id", userId);
+            req.header("x-2fa-method", "password");
+            req.header("x-2fa-code", sha256password);
         }
 
         if (queryParams != null && queryParams.get() != null && !queryParams.isEmpty()) {
@@ -142,6 +170,8 @@ public class RocketChatClientCallBuilder {
         if (call.requiresAuth()) {
             req.header("X-Auth-Token", authToken);
             req.header("X-User-Id", userId);
+            req.header("x-2fa-method", "password");
+            req.header("x-2fa-code", sha256password);
         }
 
         if (queryParams != null && queryParams.get() != null && !queryParams.isEmpty()) {
