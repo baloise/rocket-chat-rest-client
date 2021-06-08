@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.github.baloise.rocketchatrestclient.model.Channel;
 import com.github.baloise.rocketchatrestclient.model.Group;
-import com.github.baloise.rocketchatrestclient.model.Message;
 import com.github.baloise.rocketchatrestclient.model.Room;
 import com.github.baloise.rocketchatrestclient.model.ServerInfo;
 import com.github.baloise.rocketchatrestclient.model.Setting;
@@ -275,14 +274,6 @@ public class RocketChatClientTestIT {
 			fail(e.getMessage());
 		}
 
-	}
-
-	@Test
-	public void testPostMessageToChannel() throws IOException {
-		Channel[] list = this.rc.getChannelsApi().list();
-		assertTrue(list.length > 0);
-		Message message = new Message("test message");
-		this.rc.getChatApi().postMessage(list[0], message);
 	}
 
 }
