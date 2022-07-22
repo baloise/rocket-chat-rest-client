@@ -1,11 +1,18 @@
 package com.github.baloise.rocketchatrestclient;
 
+import static org.apache.http.entity.mime.HttpMultipartMode.BROWSER_COMPATIBLE;
+import static org.apache.http.entity.mime.HttpMultipartMode.RFC6532;
+
+import com.github.baloise.rocketchatrestclient.requests.SetAvatarRequest;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Map.Entry;
 
+import org.apache.http.entity.ContentType;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -85,6 +92,32 @@ public class RocketChatClientCallBuilder {
                 return this.buildPostCall(call, queryParams, body);
             default:
                 throw new IOException("Http Method " + call.getHttpMethod().toString() + " is not supported.");
+        }
+    }
+
+    protected RocketChatClientResponse buildSetAvatarCall(RocketChatRestApiV1 call, RocketChatQueryParams queryParams, SetAvatarRequest body) throws IOException {
+        login();
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(password.trim().getBytes());
+            sha256password = bytesToHex(digest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException("Could not generate sha256 password digest", e);
+        }
+
+        String methodName = prepareCallMethodName(call, queryParams);
+
+        try {
+            HttpResponse<String> res = Unirest.post(serverUrl + methodName)
+                    .header("X-Auth-Token", authToken)
+                    .header("X-User-Id", userId)
+                    .header("x-2fa-method", "password")
+                    .header("x-2fa-code", sha256password)
+                    .field("userId", body.getUserId(), ContentType.create("text/plain").getMimeType())
+                    .field("image", new ByteArrayInputStream(body.getImage()), ContentType.create("image/jpeg"), "avatar.jpg")
+                    .asString();
+            return objectMapper.readValue(res.getBody(), RocketChatClientResponse.class);
+        } catch (UnirestException e) {
+            throw new IOException(e);
         }
     }
     

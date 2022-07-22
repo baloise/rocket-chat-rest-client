@@ -1,57 +1,20 @@
 package com.github.baloise.rocketchatrestclient.requests;
 
+import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+@Builder
+@AllArgsConstructor
 public class CreateUserRequest {
+
     private String email, name, password, username;
-    private boolean verified;
+    private Boolean active, verified;
     private String[] roles;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public String[] getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String[] roles) {
-        this.roles = roles;
-    }
+    private Map<String, String> customFields;
 
     public CreateUserRequest(String email, String name, String password, String username, boolean verified, String[] roles) {
         this.email = email;
@@ -61,6 +24,7 @@ public class CreateUserRequest {
         this.verified = verified;
         this.roles = roles;
     }
+
 
 
 }

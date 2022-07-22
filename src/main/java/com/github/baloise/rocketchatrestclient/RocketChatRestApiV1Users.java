@@ -1,5 +1,6 @@
 package com.github.baloise.rocketchatrestclient;
 
+import com.github.baloise.rocketchatrestclient.requests.SetAvatarRequest;
 import java.io.IOException;
 
 import com.github.baloise.rocketchatrestclient.model.User;
@@ -109,6 +110,15 @@ public class RocketChatRestApiV1Users {
 
 		if (!res.isSuccessful())
 			throw new IOException("The call to delete the user was unsuccessful: \"" + res.getError() + "\"");
+
+		return res.isSuccessful();
+	}
+
+	public boolean setUserAvatar(SetAvatarRequest setAvatarRequest) throws IOException {
+		RocketChatClientResponse res = this.callBuilder.buildSetAvatarCall(RocketChatRestApiV1.UsersSetAvatar, null, setAvatarRequest);
+
+		if (!res.isSuccessful())
+			throw new IOException("The call to set user avatar was unsuccessful: \"" + res.getError() + "\"");
 
 		return res.isSuccessful();
 	}

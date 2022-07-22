@@ -17,12 +17,30 @@
 			<groupId>com.mashape.unirest</groupId>
 			<artifactId>unirest-java</artifactId>
 			<version>1.4.8</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>1.7.26</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.6</version>
 		</dependency>
 
 		<dependency>
@@ -35,6 +53,13 @@
 			<groupId>com.vdurmont</groupId>
 			<artifactId>emoji-java</artifactId>
 			<version>3.1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -52,118 +77,12 @@
 			</plugin>
 
 			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<version>0.36.0</version>
-				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>prepare-rocketchat</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>build</goal>
-							<goal>start</goal>
-						</goals>
-						<configuration>
-							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
-							<images>
-								<image>
-									<name>rocketchat/rocket.chat:latest</name>
-									<alias>rocketchat</alias>
-									<run>
-										<log>
-											<enabled>false</enabled>
-										</log>
-										<network>
-											<name>backend</name>
-											<alias>rocketchat</alias>
-										</network>
-										<dependsOn>
-											<container>mongo</container>
-										</dependsOn>
-										<env>
-											<API_Enable_Rate_Limiter>false</API_Enable_Rate_Limiter>
-											<MONGO_URL>mongodb://mongo:27017/rocketchat</MONGO_URL>
-											<MONGO_OPLOG_URL>mongodb://mongo:27017/local</MONGO_OPLOG_URL>
-    										<Log_Level>2</Log_Level>
-    										<ADMIN_USERNAME>admin</ADMIN_USERNAME>
- 											<ADMIN_PASS>supersecret</ADMIN_PASS>
- 											<ADMIN_EMAIL>admin@example.com</ADMIN_EMAIL>
-										</env>
-										<wait>
-											<http>
-												<url>http://localhost:23737</url>
-											</http>
-											<time>60000</time>
-										</wait>
-										<ports>
-											<port>23737:3000</port>
-										</ports>
-									</run>
-
-								</image>
-
-								<image>
-									<name>mongo:3.6</name>
-									<alias>mongo</alias>
-									<run>
-										<log>
-											<enabled>false</enabled>
-										</log>
-										<wait>
-											<log>waiting for connections on port 27017</log>
-											<time>20000</time>
-										</wait>
-										<cmd>mongod --smallfiles --oplogSize 128 --replSet rs0</cmd>
-										<network>
-											<name>backend</name>
-											<alias>mongo</alias>
-										</network>
-									</run>
-								</image>
-
-								<image>
-									<name>mongo:3.6</name>
-									<alias>mongo-init-replica</alias>
-									<run>
-										<log>
-											<enabled>false</enabled>
-										</log>
-										<cmd>
-											<arg>mongo</arg>
-											<arg>mongo/rocketchat</arg>
-											<arg>--eval</arg>
-											<arg>rs.initiate({ _id:'rs0', members: [ { _id: 0, host:
-												'localhost:27017' }]})</arg>
-										</cmd>
-										<network>
-											<name>backend</name>
-											<alias>mongo-init-replica</alias>
-										</network>
-									</run>
-								</image>
-
-							</images>
-						</configuration>
-					</execution>
-					<execution>
-						<id>remove-rocketchat</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.19.1</version>
 				<executions>
 					<execution>
 						<goals>
-							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
 					</execution>

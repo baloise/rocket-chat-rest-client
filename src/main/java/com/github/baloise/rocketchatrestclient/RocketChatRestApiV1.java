@@ -89,8 +89,10 @@ public enum RocketChatRestApiV1 {
     UsersUpdate("users.update", HttpMethods.POST, true),
     /** Deletes a user. */
     UsersDelete("users.delete", HttpMethods.POST, true),
+    /** Set avatar for user user. */
+    UsersSetAvatar("users.setAvatar", HttpMethods.POST, true),
     /** Creates an auth token for an existing user**/
-    UsersCreateToken("users.createToken",HttpMethods.POST, true);
+    UsersCreateToken("users.createToken", HttpMethods.POST, true);
 
     private String methodName;
     private HttpMethods httpMethod;
