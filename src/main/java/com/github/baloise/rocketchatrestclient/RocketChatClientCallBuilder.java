@@ -119,13 +119,13 @@ public class RocketChatClientCallBuilder {
         HttpResponse<JsonNode> loginResult;
 
         try {
-            loginResult = Unirest.post(serverUrl + "v1/login").field("username", user).field("password", password).asJson();
+            loginResult = Unirest.post(serverUrl + "v1/login").field("user", user).field("password", password).asJson();
         } catch (UnirestException e) {
             throw new IOException(e);
         }
 
         if (loginResult.getStatus() == 401)
-            throw new IOException("The username and password provided are incorrect.");
+            throw new IOException("The user and password provided are incorrect.");
 
         
 		if (loginResult.getStatus() != 200)
